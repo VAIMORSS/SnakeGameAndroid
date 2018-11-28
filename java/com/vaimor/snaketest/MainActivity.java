@@ -12,7 +12,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public SnakeView snakeView;
     private final Handler handler = new Handler();
+
     private float prevX=100, prevY=100;
+
     private float h,w;
     int currentDir=0;
     @Override
@@ -26,11 +28,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int width = displayMetrics.widthPixels;
         this.h=height;
         this.w=width;
+        snakeView.foodForSnake(w,h);
         snakeView.setOnTouchListener(this);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 handler.postDelayed(this,500);
+                snakeView.foodcheker();
                 snakeView.update(currentDir);
                 snakeView.invalidate();
 
