@@ -34,42 +34,66 @@ public class SnakeView extends View {
         return tempSnake;
     }
 
-    public void foodcheker(){
 
-        if(snake.get(0).x-f.x <100 && snake.get(0).y-f.y <100 && f.x-this.snake.get(0).x <100 && f.y-this.snake.get(0).y <100) {
-            snake.add(tempSnakeMaker(f.x,f.y));// here this value should be assign to the first portion o fthe snake 
-            System.out.println(f.x+"     "+f.y);
-
-        }
-
-        for(int j=1;j<snake.size();j++){
+    public void updater(){
+        for(int j=snake.size()-1;j>1;j--){
             snake.get(j).x=snake.get(j-1).x;
             snake.get(j).y=snake.get(j-1).y;
             snake.get(j).setter();
         }
+    }
+
+    public void foodcheker(){
+
+        if(snake.get(0).x-f.x <100 && snake.get(0).y-f.y <100 && f.x-this.snake.get(0).x <100 && f.y-this.snake.get(0).y <100) {
+
+
+            snake.add(0,tempSnakeMaker(f.x,f.y));// here this value should be assign to the firtst
+            System.out.println(f.x+"     "+f.y);
+
+            //when ever I add something i need to change the newx partameter as per thge diretion plus the directtin should have
+        }
+
+
 
 
 
     }
 
     public void update(int i){
-
+        for(int j=snake.size()-1;j>0;j--){
+            snake.get(j).x=snake.get(j-1).x;
+            snake.get(j).y=snake.get(j-1).y;}
 
         switch (i){
             case 1:
-                snake.get(0).x-=width; //LEFT
+
+                    snake.get(0).x-=width; //LEFT
+
                 break;
             case 2:
-                snake.get(0).x+=width; //RIGHT
+
+                    snake.get(0).x+=width; //RIGHT
+
                 break;
             case 3:
-                snake.get(0).y-=width; //UP
+
+                    snake.get(0).y-=width; //UP
+
                 break;
             case 4:
-                snake.get(0).y+=width; //DOWN
+
+                    snake.get(0).y+=width; //DOWN
+
                 break;
         }
+      ///  updater();
         snake.get(0).setter();
+        for(int j=snake.size()-1;j>0;j--){
+            snake.get(j).setter();
+        }
+
+
 
     }
 
