@@ -22,13 +22,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         snakeView=  new SnakeView(this);
         setContentView(snakeView);
+
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
+
         this.h=height;
         this.w=width;
-        snakeView.foodForSnake(w,h);
+        snakeView.foodForSnake((int)w,(int)h);
+        snakeView.wallMaker();
+
         snakeView.setOnTouchListener(this);
         handler.postDelayed(new Runnable() {
             @Override
@@ -49,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-               // this.prevX = event.getX();
-               // this.prevY = event.getY();
-
                 break;
             case MotionEvent.ACTION_UP:
                 float newX = event.getX();
