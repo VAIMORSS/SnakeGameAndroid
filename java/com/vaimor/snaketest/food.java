@@ -28,8 +28,8 @@ public class food {
     }
 
     public void foodSetter(){
-        this.x= (int)(Math.random()*(screenWidth-75)+75);
-        this.y= (int)(Math.random()*(screenHeight-4*75)+75);
+        this.x= (int)(Math.random()*(screenWidth-2*width)+width);
+        this.y= (int)(Math.random()*(screenHeight-7*width)+width);
         this.x=this.x-(this.x%width);
         this.y=this.y-(this.y%width);
         food = new Rect(this.x,this.y,this.x+width,this.y+width);

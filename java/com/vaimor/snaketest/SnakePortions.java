@@ -1,6 +1,8 @@
 package com.vaimor.snaketest;
 
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+
 
 public class SnakePortions {
 
@@ -11,7 +13,9 @@ public class SnakePortions {
     widthSetter widthsetter= new widthSetter();
 
 
+
     public SnakePortions(){
+
         this.dir=1;
         this.x=100;
         this.y=100;

@@ -4,20 +4,25 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class SnakeView extends View {
 
-    int screenWidth, screenHeight;
+    int screenWidth, screenHeight, score=0;
     boolean flag=true;
     widthSetter widthsetter = new widthSetter();
     int width = widthsetter.width;
     int x = width * 2;
     int y = width * 2;
+    Drawable wall = getResources().getDrawable(R.drawable.border_cell);
+    Drawable snakeImage = getResources().getDrawable(R.drawable.snake);
+    Drawable foodImage = getResources().getDrawable(R.drawable.food);
+    public levels level= new levels();
 
 
     public Rect rect, foodr;
@@ -28,10 +33,14 @@ public class SnakeView extends View {
 
 
     public void gameOut(){
-
-        if(snake.get(0).x<width ||snake.get(0).y<width ||snake.get(0).x>screenWidth-width ||snake.get(0).y>screenHeight-width){
-            flag=false;
+        for(int i=0;i<level.numberOfblock;i++){
+            if(snake.get(0).x==level.x[i]+width || snake.get(0).x==level.x[i]){
+                flag=false;
+            }else if(snake.get(0).y==level.y[i]+width || snake.get(0).y==level.y[i]){
+                flag=false;
+            }
         }
+
 
     }
     public void wallMaker(){
@@ -40,6 +49,7 @@ public class SnakeView extends View {
     public SnakeView(Context context) {
         super(context);
         snake.add(tempSnakeMaker(100, 100));
+
     }
 
     public SnakePortions tempSnakeMaker(int x, int y) {
@@ -53,7 +63,7 @@ public class SnakeView extends View {
         f.foodSetter();
         this.screenWidth = w;
         this.screenHeight = h;
-
+        level.setSheight(w,h);
     }
 
     public void foodcheker() {
@@ -62,19 +72,32 @@ public class SnakeView extends View {
             snake.add(0, tempSnakeMaker(f.x, f.y));
             System.out.println(f.x + "     " + f.y);
             f.foodSetter();
+            score++;
+        }
+
+        if(score>0){
+            level.level1();
+
+
+        }else if(score>20){
+            level.level2();
         }
 
 
     }
 
     public void update(int i) {
+        if(score>1){
+            gameOut();
+        }
+
         for (int j = snake.size() - 1; j > 0; j--) {
             snake.get(j).x = snake.get(j - 1).x;
             snake.get(j).y = snake.get(j - 1).y;
         }
 
-        
-        if(snake.get(0).x>screenWidth){
+
+        if(snake.get(0).x>=screenWidth){
             snake.get(0).x=0;
         }if(snake.get(0).x<0){
             snake.get(0).x=screenWidth;
@@ -111,6 +134,7 @@ public class SnakeView extends View {
             snake.get(j).setter();
         }
 
+
     }
 
 
@@ -122,22 +146,48 @@ public class SnakeView extends View {
         paintForWall.setColor(Color.BLACK);
         paintForWall.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawColor(Color.WHITE);
-        canvas.drawRect(f.food, f.foodPaint);
+
+        foodImage.setBounds(f.x,f.y,f.x+width,f.y+width);
+        foodImage.draw(canvas);
+        paintForWall.setTextSize(55);
+        canvas.drawText("Score : "+ String.valueOf(score),100,100, paintForWall);
+
         for (int k = 0; k < snake.size(); k++) {
-            canvas.drawRect(snake.get(k).snakePortion, paint);
+            //canvas.drawRect(snake.get(k).snakePortion, paint);
+            snakeImage.setBounds(snake.get(k).x,snake.get(k).y,snake.get(k).x+width,snake.get(k).y+width);
+            snakeImage.draw(canvas);
+        }
+        for(int i=0;i<level.numberOfblock;i++){
+            wall.setBounds(level.x[i],level.y[i],level.x[i]+width,level.y[i]+width);
+            wall.draw(canvas);
         }
 
+
+
+        /*
         int xW=0,yW=0;
         while(xW<screenWidth){
-            canvas.drawCircle(xW,0,width/2,paintForWall);
-            canvas.drawCircle(xW,screenHeight-4*width,width/2,paintForWall);
+            wall.setBounds(xW,0,xW+width,width);
+            wall.draw(canvas);
+            wall.setBounds(xW,screenHeight-5*width,xW+width,screenHeight-4*width);
+            wall.draw(canvas);
+
+            //canvas.drawCircle(xW,0,width/2,paintForWall);
+            //canvas.drawCircle(xW,screenHeight-4*width,width/2,paintForWall);
             xW+=width;
         }
+        yW=75;
         while(yW<screenHeight){
-            canvas.drawCircle(0,yW-width,width/2,paintForWall);
-            canvas.drawCircle(screenWidth,yW,width/2,paintForWall);
+            wall.setBounds(0,yW-width,width,yW);
+            wall.draw(canvas);
+
+            wall.setBounds(screenWidth-width,yW-width,screenWidth,yW);
+            wall.draw(canvas);
+
+           // canvas.drawCircle(0,yW-width,width/2,paintForWall);
+           // canvas.drawCircle(screenWidth,yW,width/2,paintForWall);
             yW+=width;
-        }
+        }*/
 
     }
 }

@@ -38,11 +38,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                handler.postDelayed(this,500);
-                snakeView.foodcheker();
-                snakeView.gameOut();
-                snakeView.update(currentDir);
-                snakeView.invalidate();
+                if(snakeView.flag){
+                    handler.postDelayed(this,500);
+                    snakeView.foodcheker();
+                    snakeView.update(currentDir);
+                    snakeView.invalidate();
+                }else{
+
+                }
+
 
             }
         },500);
