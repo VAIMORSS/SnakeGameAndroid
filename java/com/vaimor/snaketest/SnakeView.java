@@ -73,6 +73,16 @@ public class SnakeView extends View {
             snake.get(j).y = snake.get(j - 1).y;
         }
 
+        
+        if(snake.get(0).x>screenWidth){
+            snake.get(0).x=0;
+        }if(snake.get(0).x<0){
+            snake.get(0).x=screenWidth;
+        }if(snake.get(0).y>screenHeight){
+            snake.get(0).y=0;
+        }if(snake.get(0).y<0){
+            snake.get(0).y=screenHeight;
+        }
         switch (i) {
             case 1:
 
