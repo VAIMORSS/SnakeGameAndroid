@@ -13,6 +13,7 @@ import java.util.List;
 public class SnakeView extends View {
 
     int screenWidth, screenHeight;
+    boolean flag=true;
     widthSetter widthsetter = new widthSetter();
     int width = widthsetter.width;
     int x = width * 2;
@@ -26,7 +27,13 @@ public class SnakeView extends View {
     List<SnakePortions> snake = new ArrayList<SnakePortions>();
 
 
+    public void gameOut(){
 
+        if(snake.get(0).x<width ||snake.get(0).y<width ||snake.get(0).x>screenWidth-width ||snake.get(0).y>screenHeight-width){
+            flag=false;
+        }
+
+    }
     public void wallMaker(){
 
     }
@@ -56,6 +63,7 @@ public class SnakeView extends View {
             System.out.println(f.x + "     " + f.y);
             f.foodSetter();
         }
+
 
     }
 
@@ -101,7 +109,8 @@ public class SnakeView extends View {
         super.onDraw(canvas);
         rect = new Rect(x, y, x + width, y + width);
         paint.setColor(Color.BLUE);
-        paintForWall.setColor(Color.GREEN);
+        paintForWall.setColor(Color.BLACK);
+        paintForWall.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawColor(Color.WHITE);
         canvas.drawRect(f.food, f.foodPaint);
         for (int k = 0; k < snake.size(); k++) {

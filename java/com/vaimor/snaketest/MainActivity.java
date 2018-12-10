@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             public void run() {
                 handler.postDelayed(this,500);
                 snakeView.foodcheker();
+                snakeView.gameOut();
                 snakeView.update(currentDir);
                 snakeView.invalidate();
 
