@@ -59,32 +59,32 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 float newX = event.getX();
                 float newY = event.getY();
 
-                if(Math.abs(newX - this.prevX)/this.w > Math.abs(newY - this.prevY)/this.h) {
+                 if (Math.abs(newX - this.prevX) / this.w > Math.abs(newY - this.prevY) / this.h) {
                     //LEFT - RIGHT direction
 
-                    if ((newX - this.prevX)<0){
-                        snakeView.update(1);
-                        this.currentDir=1;
-                    }else {
-                        snakeView.update(2);
-                        this.currentDir=2;
+                    if ((newX - this.prevX) < 0 && this.currentDir!=2) {
+                        snakeView.update(1);//left
+                        this.currentDir = 1;
+                    } else if( (newX - this.prevX) > 0 && this.currentDir!=1){
+                        snakeView.update(2);//right
+                        this.currentDir = 2;
 
                     }
-                }else{
+                } else {
                     // UP= DOWN direction
-                    if((newY - this.prevY)<0) {
-                        snakeView.update(3);
-                        this.currentDir=3;
+                    if ((newY - this.prevY) < 0 && this.currentDir!=4) {
+                        snakeView.update(3);//up
+                        this.currentDir = 3;
 
-                    }else{
-                        snakeView.update(4);
-                        this.currentDir=4;
+                    } else if((newY - this.prevY) > 0 && this.currentDir!=3){
+                        snakeView.update(4);//down
+                        this.currentDir = 4;
 
                     }
                 }
 
-                this.prevX=newX;
-                this.prevY=newY;
+                this.prevX = newX;
+                this.prevY = newY;
         }
 
         return true;
