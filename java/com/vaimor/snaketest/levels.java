@@ -18,6 +18,12 @@ public class levels{
 
     }
 
+    public void reset(){
+        x = new int[0];
+        y = new int[0];
+        numberOfblock=0;
+    }
+
     public void setSheight(int x, int y){
         this.sheight=y;
         this.swidth=x;

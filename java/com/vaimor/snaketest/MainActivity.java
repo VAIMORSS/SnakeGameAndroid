@@ -7,12 +7,14 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     public SnakeView snakeView;
     private final Handler handler = new Handler();
-
+    int l;
+    int speed=500;
     private float prevX=100, prevY=100;
 
     private float h,w;
@@ -31,20 +33,37 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         this.h=height;
         this.w=width;
-        snakeView.foodForSnake((int)w,(int)h);
-        snakeView.wallMaker();
 
+        snakeView.foodForSnake((int)w,(int)h);
         snakeView.setOnTouchListener(this);
+        l=0;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 if(snakeView.flag){
-                    handler.postDelayed(this,500);
+                    handler.postDelayed(this,speed);
+                    if(snakeView.snake.size()>0){
                     snakeView.foodcheker();
                     snakeView.update(currentDir);
+                    }
+
                     snakeView.invalidate();
                 }else{
+                   // Log.d("In else"," : YES");
+                    handler.postDelayed(this,1000);
 
+                    l++;
+                    if(l>2){
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "You lost New game starting in few second",
+                                Toast.LENGTH_SHORT);
+
+                        toast.show();
+                        snakeView.resetgame();
+                        snakeView.flag=true;
+                        l=0;
+                    }
                 }
 
 

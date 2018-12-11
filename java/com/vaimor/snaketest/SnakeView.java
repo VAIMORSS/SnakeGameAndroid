@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ public class SnakeView extends View {
     int width = widthsetter.width;
     int x = width * 2;
     int y = width * 2;
+    String onOut=" ";
+    int levelNo=0,speed=500;
     Drawable wall = getResources().getDrawable(R.drawable.border_cell);
     Drawable snakeImage = getResources().getDrawable(R.drawable.snake);
     Drawable foodImage = getResources().getDrawable(R.drawable.food);
@@ -27,25 +30,34 @@ public class SnakeView extends View {
 
     public Rect rect, foodr;
     public Paint paint = new Paint();
-    public Paint paintForWall = new Paint();
+    public Paint paintForScore = new Paint();
+    public Paint paintForLevel = new Paint();
+
     food f = new food();
     List<SnakePortions> snake = new ArrayList<SnakePortions>();
 
+    public void resetgame(){
+        resetSnake();
+        score=0;
+        level.reset();
+    }
+
+    public void resetSnake(){
+        snake.clear();
+        snake.add(tempSnakeMaker(100, 100));
+    }
 
     public void gameOut(){
         for(int i=0;i<level.numberOfblock;i++){
-            if(snake.get(0).x==level.x[i]+width || snake.get(0).x==level.x[i]){
-                flag=false;
-            }else if(snake.get(0).y==level.y[i]+width || snake.get(0).y==level.y[i]){
+         //   Log.d("dim",snake.get(0).x+" "+snake.get(0).y+" "+level.x[i]+" "+level.y[i]);
+            if(snake.get(0).x - level.x[i] < width && snake.get(0).y - level.y[i] < width && level.x[i] - this.snake.get(0).x < width && level.y[i] - this.snake.get(0).y < width){
                 flag=false;
             }
         }
 
 
     }
-    public void wallMaker(){
 
-    }
     public SnakeView(Context context) {
         super(context);
         snake.add(tempSnakeMaker(100, 100));
@@ -70,24 +82,49 @@ public class SnakeView extends View {
 
         if (snake.get(0).x - f.x < width && snake.get(0).y - f.y < width && f.x - this.snake.get(0).x < width && f.y - this.snake.get(0).y < width) {
             snake.add(0, tempSnakeMaker(f.x, f.y));
-            System.out.println(f.x + "     " + f.y);
+            //System.out.println(f.x + "     " + f.y);
             f.foodSetter();
             score++;
         }
-
-        if(score>0){
+        if(score>2){
             level.level1();
-
-
-        }else if(score>20){
+            this.speed=400;
+            levelNo=1;
+        }else if(score>5){
             level.level2();
+            this.speed=350;
+            levelNo=2;
+        }else if(score>9){
+            level.reset();
+            levelNo=3;
+            this.speed=300;
+        }else if(score>13){
+            level.level1();
+            levelNo=4;
+            this.speed=250;
+        }else if(score > 16){
+            level.level2();
+            this.speed=200;
+            levelNo=5;
+        }else if(score >19){
+            level.reset();
+            levelNo=6;
+            this.speed=150;
+        }else if(score>22){
+            levelNo=7;
+            level.level1();
+            this.speed=100;
+        }else if(score>24){
+            level.level2();
+            levelNo=8;
+            this.speed=50;
         }
 
 
     }
 
     public void update(int i) {
-        if(score>1){
+        if(score>0){
             gameOut();
         }
 
@@ -96,7 +133,7 @@ public class SnakeView extends View {
             snake.get(j).y = snake.get(j - 1).y;
         }
 
-
+        //System.out.println("size  :  "+snake.size());
         if(snake.get(0).x>=screenWidth){
             snake.get(0).x=0;
         }if(snake.get(0).x<0){
@@ -138,56 +175,43 @@ public class SnakeView extends View {
     }
 
 
+    public void onOutText(String s){
+        this.onOut=s;
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         rect = new Rect(x, y, x + width, y + width);
         paint.setColor(Color.BLUE);
-        paintForWall.setColor(Color.BLACK);
-        paintForWall.setStyle(Paint.Style.FILL_AND_STROKE);
+        paintForScore.setColor(Color.BLACK);
+        paintForLevel.setColor(Color.RED);
+
         canvas.drawColor(Color.WHITE);
 
         foodImage.setBounds(f.x,f.y,f.x+width,f.y+width);
         foodImage.draw(canvas);
-        paintForWall.setTextSize(55);
-        canvas.drawText("Score : "+ String.valueOf(score),100,100, paintForWall);
+
+        paintForScore.setTextSize(75);
+        paintForLevel.setTextSize(75);
+
+        canvas.drawText("Score : "+ String.valueOf(score),100,100, paintForScore);
+        canvas.drawText("Level : "+ String.valueOf(levelNo),1100,100, paintForLevel);
+
+        if(!flag){
+            canvas.drawText(onOut,100,100,paintForScore);
+        }
 
         for (int k = 0; k < snake.size(); k++) {
             //canvas.drawRect(snake.get(k).snakePortion, paint);
             snakeImage.setBounds(snake.get(k).x,snake.get(k).y,snake.get(k).x+width,snake.get(k).y+width);
             snakeImage.draw(canvas);
         }
+
         for(int i=0;i<level.numberOfblock;i++){
             wall.setBounds(level.x[i],level.y[i],level.x[i]+width,level.y[i]+width);
             wall.draw(canvas);
         }
-
-
-
-        /*
-        int xW=0,yW=0;
-        while(xW<screenWidth){
-            wall.setBounds(xW,0,xW+width,width);
-            wall.draw(canvas);
-            wall.setBounds(xW,screenHeight-5*width,xW+width,screenHeight-4*width);
-            wall.draw(canvas);
-
-            //canvas.drawCircle(xW,0,width/2,paintForWall);
-            //canvas.drawCircle(xW,screenHeight-4*width,width/2,paintForWall);
-            xW+=width;
-        }
-        yW=75;
-        while(yW<screenHeight){
-            wall.setBounds(0,yW-width,width,yW);
-            wall.draw(canvas);
-
-            wall.setBounds(screenWidth-width,yW-width,screenWidth,yW);
-            wall.draw(canvas);
-
-           // canvas.drawCircle(0,yW-width,width/2,paintForWall);
-           // canvas.drawCircle(screenWidth,yW,width/2,paintForWall);
-            yW+=width;
-        }*/
 
     }
 }
